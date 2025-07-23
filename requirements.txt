@@ -1,0 +1,13 @@
+# Para o Django (Backend + Frontend)
+Django==4.2.7
+djangorestframework==3.14.0
+django-cors-headers==4.3.1  # Se precisar de CORS
+
+# Para MQTT (Django + Simulador)
+paho-mqtt==1.6.1  # Usado pelo Django e simulador
+
+# Para o Broker MQTT local (opcional)
+gmqtt==0.6.10  # Alternativa leve ao Mosquitto
+
+# Para o ESP32 Simulator
+requests==2.31.0  # Para enviar HTTP POST

@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Dashboard IoT</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/paho-mqtt/1.1.0/paho-mqtt.min.js"></script>
+</head>
+<body>
+    <h1>Monitoramento em Tempo Real</h1>
+    
+    <!-- Últimos dados estáticos -->
+    <div id="static-data">
+        <h2>Última Leitura:</h2>
+        {% if latest_data %}
+            <p>Sensor: {{ latest_data.sensor_id }}</p>
+            <p>Temperatura: {{ latest_data.temperature }}°C</p>
+            <p>Umidade: {{ latest_data.humidity }}%</p>
+            <p>Hora: {{ latest_data.timestamp }}</p>
+        {% else %}
+            <p>Nenhum dado disponível</p>
+        {% endif %}
+    </div>
+    
+    <!-- Dados em tempo real -->
+    <div id="realtime-data">
+        <h2>Atualizações em Tempo Real:</h2>
+        <p id="rt-temperature">Temperatura: --</p>
+        <p id="rt-humidity">Umidade: --</p>
+        <p id="rt-timestamp">Atualizado: --</p>
+    </div>
+
+    <script>
+        const client = new Paho.MQTT.Client("localhost", 1883, "dashboard_" + Math.random().toString(16).substr(2, 8));
+        
+        client.onMessageArrived = onMessage;
+        client.connect({
+            onSuccess: () => {
+                console.log("Conectado ao broker MQTT");
+                client.subscribe("sensors/#");
+            },
+            onFailure: (err) => {
+                console.error("Falha na conexão MQTT:", err.errorMessage);
+            }
+        });
+
+        function onMessage(message) {
+            const data = JSON.parse(message.payloadString);
+            console.log("Nova mensagem:", data);
+            
+            document.getElementById("rt-temperature").textContent = 
+                `Temperatura: ${data.temperature}°C`;
+                
+            document.getElementById("rt-humidity").textContent = 
+                `Umidade: ${data.humidity}%`;
+                
+            document.getElementById("rt-timestamp").textContent = 
+                `Atualizado: ${new Date().toLocaleTimeString()}`;
+        }
+    </script>
+</body>
+</html>
