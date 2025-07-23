@@ -44,24 +44,6 @@ O dispositivo envia dados via **HTTP POST** para uma API Django. O Django, entã
 *   **Desvantagens**: Maior latência (passo extra), arquitetura mais complexa.
 *   **Quando usar**: Aplicações que necessitam de persistência de dados, validação, ou regras de negócio complexas.
 
-## Resumão (Baseado no que entendi do projeto)
-
-> A melhor abordagem considerando nosso projeto dos Controles será:
->
-> -   **ESP32** recebe os dados do sensor e envia via HTTP (POST) para a API
-> -   A **API do Django** recebe os dados, valida, salva no banco e envia uma confirmação `HTTP` de volta para o ESP32.
-> -   A API chama o `mqtt_service`, que publica (envia) a mensagem no **Broker MQTT**.
-> -   O **Broker MQTT** recebe a mensagem e repassa a mensagem para todos que "precisam" dela
-> -   O **JavaScript** (`<script>`) no dashboard processa os dados para atualização em tempo real.
->
-> **Observação sobre o funcionamento atual:**
->
-> *   No caso do projeto, o que está processando é uma view que retira os dados do banco e atualiza (não era a intenção primaria, mas funciona ao que parece)
-> *   Isso acontece por conta do Broker ser bem simples, com o HiveMQ ou Mosquito daria para entender melhor essa parte do processamento no Front
-> *   Pode ser apresentado como uma abordagem possivel, simplesmente salvar no banco os dados e puxar pela view sem passar pelo Broker 🤣🤣🤣
-
----
-
 ## Referências
 
 *   [Pesquisa inicial e base (DeepSeek)](https://chat.deepseek.com/a/chat/s/6ccff112-ea10-47fe-a03a-6f72b1d0c88f)
